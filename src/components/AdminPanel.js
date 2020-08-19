@@ -9,14 +9,21 @@ class AdminPanel extends React.Component {
         super();
         this.state = {
             loggedIn: false,
+            editMode: false,
         };
     }
 
     changeLoggedIn = (newValue) => this.setState({ loggedIn: newValue });
 
-    addNewBook = (book) =>
-        this.setState({ books: [...this.state.books, book] });
-
+    addNewBook = (book) => {
+        if (Array.isArray(this.state.books)) {
+            this.setState({ books: [...this.state.books, book] });
+        } else {
+            this.setState({
+                books: [book],
+            });
+        }
+    };
     componentDidMount() {
         this.ref = fbase.syncState("bookstore/books", {
             context: this,
@@ -34,6 +41,10 @@ class AdminPanel extends React.Component {
         });
     };
 
+    editBook = () => {
+        this.setState({ editMode: true });
+    };
+
     render() {
         return (
             <div>
@@ -42,10 +53,14 @@ class AdminPanel extends React.Component {
                 )}
                 {this.state.loggedIn && (
                     <React.Fragment>
-                        <AddBookForm addNewBook={this.addNewBook} />
+                        <AddBookForm
+                            addNewBook={this.addNewBook}
+                            editMode={this.state.editMode}
+                        />
                         <AdminBookListing
                             books={this.state.books}
                             removeFromInventory={this.removeFromInventory}
+                            editBook={this.editBook}
                         />
                     </React.Fragment>
                 )}

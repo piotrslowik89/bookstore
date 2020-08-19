@@ -53,6 +53,8 @@ class AddBookForm extends React.Component {
     };
 
     render() {
+        const label = this.props.editMode ? "Edit" : "Add";
+
         return (
             <div className="adminPanel col-xs-4">
                 <form onSubmit={this.addNewBook}>
@@ -113,7 +115,7 @@ class AddBookForm extends React.Component {
                         />
                     </div>
                     <button type="submit" className="btn btn-primary">
-                        Add
+                        {label}
                     </button>
                 </form>
             </div>
